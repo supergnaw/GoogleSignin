@@ -11,7 +11,7 @@
 	echo $goo->signin_button();
 
 	// show redierct script only while session var is empty to prevent endless loop
-	if( empty( $_SESSION[$goo->sessVar] )) echo $goo->script_authenticate_redirect( $goo->authURL . $goo->$tokenName . '/' );
+	if( empty( $_SESSION[$goo->sessVar] )) echo $goo->script_authenticate_redirect( $goo->authURL .'?'. $goo->tokenName .'=' );
 
 	// actions to do when validating token
 	if( !empty( $_GET['token'] )) {
