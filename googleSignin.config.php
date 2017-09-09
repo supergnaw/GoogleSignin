@@ -5,7 +5,7 @@
 		'clientID' => 'your-client-id',
 		'clientSecret' => 'your-client-secret',
 		'redirectURI' => 'your-redirect-uri',
-		'authURL' => 'your-authorized-url',
+		'authURL' => '/example_signin.php',
 		'sessVar' => 'user_data',
 		'tokenName' => 'token'
 	);
