@@ -1,5 +1,5 @@
 <?php
-	/*** signin.php ***/
+	/*** example_signin.php ***/
 	// include and declare class
 	require_once( 'php/class.GoogleSignin.php' );
 	$goo = new GoogleSignin( 'googleSignin.config.php', true );
