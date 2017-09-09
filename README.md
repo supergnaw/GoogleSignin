@@ -1,5 +1,7 @@
 # GoogleSignin
 A lightweight PHP class to implement a Google Sign-In with minimal effort and overhead.
+1. [Background](#background)
+2. [Class Usage](#class-usage)
 
 ## Background
 The Google Sign-In is pretty basic to incorperate but I kept having to go back to reinvent the wheel every time I wanted to add it to a project. I created this for a more simplified approach. There isn't much in the way of error handling but it should work nonetheless.
