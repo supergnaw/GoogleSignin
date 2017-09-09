@@ -1,13 +1,13 @@
 # GoogleSignin
 A lightweight PHP class to implement a Google Sign-In with minimal effort and overhead.
-1. [Background](#background)
-2. [Class Usage](#class-usage)
-   2.1 [Declaring The Class](#declaring-the-class)
-   2.2 [Defining The Variables](#defining-the-variables)
-   2.3 [Manually Set Variables](#manually-set-variables)
-3. [Example Explained](#example-explained)
-   3.1 [Signin](#signin)
-   3.2 [Signout](#signout)
+- [Background](#background)
+- [Class Usage](#class-usage)
+  - [Declaring The Class](#declaring-the-class)
+  - [Defining The Variables](#defining-the-variables)
+  - [Manually Set Variables](#manually-set-variables)
+- [Example Explained](#example-explained)
+  - [Signin](#signin)
+  - [Signout](#signout)
 
 ## Background
 The Google Sign-In is pretty basic to incorperate but I kept having to go back to reinvent the wheel every time I wanted to add it to a project. I created this for a more simplified approach. There isn't much in the way of error handling but it should work nonetheless.
@@ -55,4 +55,41 @@ $goo->redirectURI = "https://{$_SERVER['HTTP_HOST']}/";
 
 ## Example Explained
 ### Signin
+The first portion of code is to include and declare the class, also defining the arguments using the default values so this is not necessary. If you look at the source code through the browser, you'll see this will include a vew of the required scripts automatically so you don't have to add them later.
+```PHP
+<?php
+	/*** signin.php ***/
+	// include and declare class
+	require_once( 'php/class.GoogleSignin.php' );
+	$goo = new GoogleSignin( 'googleSignin.config.php', true );
+```
+Following that is a section of code that dumps the $\_SESSION variable to show that it is empty, as well as displaying the Google button:
+```PHP
+	// session var will be empty until user signin
+	var_dump( $_SESSION );
+
+	// display the signin button
+	echo $goo->signin_button();
+```
+The next section does all the magic in one line of code. After a successful sign-in action through Google, the page redirects to the predefined URL (in this case, itself) to authenticate the login, then passes the token on to the redirect page for user fetching. In this example, the URL constructed ends up as "/example_signin.php?token=" with the fetched token appended.
+```PHP
+	// show redierct script only while session var is empty to prevent endless loop
+	if( empty( $_SESSION[$goo->sessVar] )) echo $goo->script_authenticate_redirect( $goo->authURL .'?'. $goo->tokenName .'=' );
+```
+Further down, this section does the nitty-gritty fetching user data. Using the token passed through GET, user data is fetched from Google, then is passed to $\_SESSION to the key defined in the *$goo->sessVar* class variable:
+```PHP
+	// actions to do when validating token
+	if( !empty( $_GET['token'] )) {
+		// load user into session variable
+		$goo->fetch_user_data();
+		// redirect page as necessary
+		$goo->redirectURI = '/example_signin.php';
+		echo $goo->page_redirect();
+	}
+```
+Finally, the code for a logout link is provided which redirects to the signout page. With a few extra if statements, the actions performed on the signout page could also be accomplished on the signin page.
+```PHP
+	// provide a way for user to signout
+	echo $goo->script_signout( '/signout', 500 );
+```
 ### Signout
