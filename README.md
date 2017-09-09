@@ -2,6 +2,12 @@
 A lightweight PHP class to implement a Google Sign-In with minimal effort and overhead.
 1. [Background](#background)
 2. [Class Usage](#class-usage)
+   2.1 [Declaring The Class](#declaring-the-class)
+   2.2 [Defining The Variables](#defining-the-variables)
+   2.3 [Manually Set Variables](#manually-set-variables)
+3. [Example Explained](#example-explained)
+   3.1 [Signin](#signin)
+   3.2 [Signout](#signout)
 
 ## Background
 The Google Sign-In is pretty basic to incorperate but I kept having to go back to reinvent the wheel every time I wanted to add it to a project. I created this for a more simplified approach. There isn't much in the way of error handling but it should work nonetheless.
@@ -46,3 +52,7 @@ $goo->redirectURI = "https://{$_SERVER['HTTP_HOST']}/";
 | authURL | User Defined | The URL to direct the script to in order to validate authorization tokens |
 | sessVar | 'user_data' | The key to assign user information to in session variable: $\_SESSION\['user_data'] |
 | tokenName | 'token' | The \_GET key name that the script passes the token with: $\_GET\['token'] |
+
+## Example Explained
+### Signin
+### Signout
