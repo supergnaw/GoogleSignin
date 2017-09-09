@@ -18,9 +18,9 @@
 		// load user into session variable
 		$goo->fetch_user_data();
 		// redirect page as necessary
-		$goo->redirectURI = '/';
+		$goo->redirectURI = '/example_signin.php';
 		echo $goo->page_redirect();
 	}
 
 	// provide a way for user to signout
-	echo $goo->script_signout( '/signout', 500 );
+	echo $goo->script_signout( '/example_signout.php', 500 );
