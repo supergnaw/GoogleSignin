@@ -57,7 +57,7 @@ $goo->redirectURI = "https://{$_SERVER['HTTP_HOST']}/";
 ### Signin
 The first portion of code is to include and declare the class, also defining the arguments using the default values so this is not necessary. If you look at the source code through the browser, you'll see this will include a vew of the required scripts automatically so you don't have to add them later.
 ```PHP
-/*** signin.php ***/
+/*** example_signin.php ***/
 // include and declare class
 require_once( 'php/class.GoogleSignin.php' );
 $goo = new GoogleSignin( 'googleSignin.config.php', true );
@@ -94,7 +94,7 @@ echo $goo->script_signout( '/signout', 500 );
 ### Signout
 The first section is identical to the signin.php, however we do not need the core scripts so they are omitted with *false* as the second argument:
 ```PHP
-/*** signout.php ***/
+/*** example_signout.php ***/
 // include and declare class
 require_once( 'php/class.GoogleSignin.php' );
 $goo = new GoogleSignin( 'googleSignin.config.php', false );
