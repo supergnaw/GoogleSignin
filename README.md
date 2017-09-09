@@ -24,7 +24,8 @@ $config = array(
     'clientSecret' => 'your-client-secret',
     'redirectURI' => 'your-redirect-uri',
     'authURL' => 'your-authorized-url',
-    'sessVar' => 'user_data'
+    'sessVar' => 'user_data',
+    'tokenName' => 'token'
 );
 ```
 ##### Manually Defined Variables
