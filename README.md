@@ -19,8 +19,8 @@ Declaring the class is pretty basic with two arguments:
  require_once( 'class.GoogleSignin.php' );
  $goo = new GoogleSignin( string $configFile, bool $echoInitCode );
 ```
-*$configFile* is the filename for the config. Its path should be relative to the class file.
-*$echoInitCode* is a boolean used to determine if the default required javascript code should be echoed during class initialization.
+- *$configFile* is the filename for the config. This path should be relative to the class file.
+- *$echoInitCode* is a boolean used to determine if the default required javascript code should be echoed during class initialization.
 ### Defining The Variables
 #### Configuration File
 By default the class variables should be set by a configuration PHP file, named *googleSignin.config.php* by default. This should be a simple array with your app settings provided by the [Google Console](https://console.developers.google.com/apis/credentials). A typical config file should look something like this:
@@ -93,3 +93,23 @@ Finally, the code for a logout link is provided which redirects to the signout p
 	echo $goo->script_signout( '/signout', 500 );
 ```
 ### Signout
+The first section is identical to the signin.php, however we do not need the core scripts so they are omitted with *false* as the second argument:
+```PHP
+<?php
+	/*** signout.php ***/
+	// include and declare class
+	require_once( 'php/class.GoogleSignin.php' );
+	$goo = new GoogleSignin( 'googleSignin.config.php', false );
+```
+After we make the class, it's time to destroy it:
+```PHP
+	// it's purging time
+	unset( $_SESSION[$goo->sessVar] );
+	session_destroy();
+```
+Finally, a link is provided to return to the signin page, along with a var_dump of $\_SESSION to confirm it has been emptied.
+```PHP
+	echo "<a href='/example_signin.php'>Signin</a>";
+	// session var is now empty
+	var_dump( $_SESSION );
+```
