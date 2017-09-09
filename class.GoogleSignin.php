@@ -1,6 +1,6 @@
 <?php
 	/*
-	 * GoogleSignin v1.1
+	 * GoogleSignin v1.2
 	 *
 	 * https://github.com/supergnaw/GoogleSignin
 	 */
@@ -11,8 +11,8 @@
 		public $clientSecret;
 		public $authURL;
 		public $redirectURI;
-		public $sessVar;
-		public $tokenName;
+		public $sessVar = 'user_data';
+		public $tokenName = 'token';
 
 		public function __construct( $configFile = 'googleSignin.config.php', $echoInitCode = true ) {
 			if( !empty( $configFile )) {
@@ -45,7 +45,7 @@
 
 		public function fetch_user_data( $toSession = null, $tokenName = null, $token = null ) {
 			if( empty( $toSession )) $toSession = $this->sessVar;
-			if( empty( $$tokenName )) $tokenName = $this->tokenName;
+			if( empty( $tokenName )) $tokenName = $this->tokenName;
 			if( !empty( $_GET[$tokenName] )) {
 				$token = ( empty( $toekn )) ? $_GET[$tokenName] : $token;
 				$url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={$token}";
@@ -82,7 +82,8 @@
 			return $code;
 		}
 
-		public static function page_redirect( $url ) {
+		public function page_redirect( $url = null ) {
+			if( empty( $url )) $url = $this->redirectURI;
 			$code = "
 				<script>window.location.replace( '{$url}' );</script>";
 			return $code;
