@@ -1,6 +1,6 @@
 <?php
 	/*
-	 * GoogleSignin v1.2
+	 * GoogleSignin v1.3
 	 *
 	 * https://github.com/supergnaw/GoogleSignin
 	 */
@@ -89,19 +89,38 @@
 			return $code;
 		}
 
+		public static function static_page_redirect( $url ) {
+			$code = "
+				<script>window.location.replace( '{$url}' );</script>";
+			return $code;
+		}
+
 		public static function signin_button() {
 			return "<div class=\"g-signin2\" data-onsuccess=\"onSignIn\"></div>\n";
 		}
 
-		public static function script_signout( $url = '#', $timeout = 500 ) {
+		public static function script_signout( $url = '#', $timeout = 500, $class = '', $id = '' ) {
+			if( !empty( $class )) $class = " class = '{$class}'";
+			if( !empty( $id )) $id = " id = '{$id}'";
 			$code = "
-				<a href = '#' onclick = 'signOut();'>Sign out</a>
+				<a href = '#'{$class}{$id} onclick = 'signOut();'>Sign Out</a>
 				<script>
 					function signOut() {
-						var auth2 = gapi.auth2.getAuthInstance();
-						auth2.signOut().then(function () {
-							console.log('User signed out.');
-						});
+						var timeout = 0;
+						if( undefined == gapi.auth2 ) {
+							gapi.load('auth2', function() {
+								gapi.auth2.init();
+							});
+							console.log( 'do stuff' );
+							// set internal timeout to prevent logout attempt before auth2 can be initialized
+							timeout = 1000;
+						}
+						setTimeout( function() {
+							var auth2 = gapi.auth2.getAuthInstance();
+							auth2.signOut().then(function () {
+								console.log('User signed out.');
+							});
+						}, timeout);
 						setTimeout(function(){
 							window.location.replace( '{$url}' );
 						}, {$timeout});
