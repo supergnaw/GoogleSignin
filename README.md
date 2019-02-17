@@ -37,14 +37,14 @@ $config = array(
 );
 ```
 #### Manually Set Variables
-You may forgo declaring the configuration file and mannually assign each class variable if you have to need to have a dynamicly changed variable, like so:
+You may forgo declaring the configuration file and mannually assign each class variable if you have a need of dynamicly changing variables, like so:
 ```PHP
 $goo->redirectURI = "https://{$_SERVER['HTTP_HOST']}/";
 ```
 #### Variable Definitions
 | Variable | Default | Description |
 | --- | --- | --- |
-| appName | Google Assigned | The name of yoru app |
+| appName | Google Assigned | The name of your app |
 | apiKey | Google Assigned | Your unique API key |
 | clientID | Google Assigned | The client ID for your app |
 | clientSecret | Google Assigned | The client secret given to your app |
