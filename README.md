@@ -8,6 +8,7 @@ A lightweight PHP class to implement a Google Sign-In with minimal effort and ov
 - [Example Explained](#example-explained)
   - [Signin](#signin)
   - [Signout](#signout)
+- [Class Functions](#class-functions)
 
 ## Background
 The Google Sign-In is pretty basic to incorperate but I kept having to go back to reinvent the wheel every time I wanted to add it to a project. I created this for a more simplified approach. There isn't much in the way of error handling but it should work nonetheless.
@@ -20,7 +21,7 @@ Declaring the class is pretty basic with two arguments:
  $goo = new GoogleSignin( string $configFile, bool $echoInitCode );
 ```
 - *$configFile* is the filename for the config. This path should be relative to the class file.
-- *$echoInitCode* is a boolean used to determine if the default required javascript code should be echoed during class initialization.
+- *$echoInitCode* is a boolean used to determine if the default required javascript code should be echoed during class initialization. You might want to do this in the instance that the class is declared in the header portion of a page.
 ### Defining The Variables
 #### Configuration File
 By default the class variables should be set by a configuration PHP file, named *googleSignin.config.php* by default. This should be a simple array with your app settings provided by the [Google Console](https://console.developers.google.com/apis/credentials). A typical config file should look something like this:
@@ -111,3 +112,6 @@ echo "<a href='/example_signin.php'>Signin</a>";
 // session var is now empty
 var_dump( $_SESSION );
 ```
+
+## Class Functions
+future documentation
