@@ -1,11 +1,12 @@
 <?php
-	/*
-	 * GoogleSignin v1.3
-	 *
-	 * https://github.com/supergnaw/GoogleSignin
-	 */
+/*
+ * GoogleSignin v2.0
+ *
+ * https://github.com/supergnaw/GoogleSignin
+ */
+
 	class GoogleSignin {
-		public $appName;
+		public $appName = 'App Name Here';
 		public $apiKey;
 		public $clientID;
 		public $clientSecret;
@@ -14,25 +15,32 @@
 		public $sessVar = 'user_data';
 		public $tokenName = 'token';
 
-		public function __construct( $configFile = 'googleSignin.config.php', $echoInitCode = true ) {
-			if( !empty( $configFile )) {
-				$configFile = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . $configFile;
-				$this->load_config( $configFile );
-			}
+		public function __construct( $echoInitCode = false ) {
+			// start session
 			if( session_status() == PHP_SESSION_NONE ) session_start();
 
-			if( true === $echoInitCode ) {
-				echo $this->load_platform_library();
-				echo $this->meta_client_id();
-			}
+			// set default url values
+			$this->authURL = strtok( $_SERVER["REQUEST_URI"], '?' );
+			$this->redirectURI = strtok( $_SERVER["REQUEST_URI"], '?' );
 		}
 
-		public function load_config( $configFile ) {
-			if( !file_exists( $configFile )) die( 'Missing config file:' . $configFile );
-			require_once( $configFile );
-			if( empty( $config )) die( '$config() not defined in config file.' );
-			foreach( $config as $name => $val ) $this->$name = $val;
+		public function verify_vars() {
+			try {
+				if( empty( $this->apiKey )) throw new Exception( 'GoogleSignin API key ( $apiKey ) not set.' );
+				if( empty( $this->clientID )) throw new Exception( 'GoogleSignin client ID ( $clientID ) not set.' );
+				if( empty( $this->clientSecret )) throw new Exception( 'GoogleSignin client ID ( $clientSecret ) not set.' );
+			} catch( Exception $e ) {
+				$this->err[] = $e->getMessage();
+				return false;
+			}
 			return true;
+		}
+
+		public function init_code() {
+			if( true !== $this->verify_vars()) {
+				return false;
+			}
+			return $this->load_platform_library() . $this->meta_client_id();
 		}
 
 		public static function load_platform_library() {
@@ -40,23 +48,27 @@
 		}
 
 		public function meta_client_id() {
+			if( true !== $this->verify_vars()) {
+				return false;
+			}
 			return "<meta name=\"google-signin-client_id\" content=\"{$this->clientID}\"/>\n";
 		}
 
-		public function fetch_user_data( $toSession = null, $tokenName = null, $token = null ) {
-			if( empty( $toSession )) $toSession = $this->sessVar;
-			if( empty( $tokenName )) $tokenName = $this->tokenName;
-			if( !empty( $_GET[$tokenName] )) {
-				$token = ( empty( $toekn )) ? $_GET[$tokenName] : $token;
-				$url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={$token}";
+		public function fetch_user_data() {
+			if( true !== $this->verify_vars()) {
+				return false;
+			}
+			try {
+				$url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={$_GET[$this->tokenName]}";
 				$obj = $this->get_url_json( $url );
 				if( false === $obj ) return false;
-				if( !empty( $toSession )) {
-					foreach( $obj as $key => $val ) $_SESSION[$toSession][$key] = $val;
+				if( !empty( $this->sessVar )) {
+					foreach( $obj as $key => $val ) $_SESSION[$this->sessVar][$key] = $val;
 				}
 				return $obj;
-			} else {
-				die( 'Missing authorization token.' );
+			} catch( Exception $e ) {
+				$this->err[] =  $e->getMessage();
+				return false;
 			}
 		}
 
@@ -69,14 +81,16 @@
 			return $obj;
 		}
 
-		public function script_authenticate_redirect( $authURL = null ) {
-			$authURL = ( !empty ( $authURL )) ? $authURL : $this->authURL;
+		public function script_authenticate_redirect( $url = null ) {
+			if( empty( $url )) {
+				$url = $goo->authURL .'?'. $goo->tokenName .'=';
+			}
 			$code = "
 				<script>
 					function onSignIn(googleUser) {
-						console.log( 'Redirecting to: {$authURL}' );
+						console.log( 'Redirecting to: {$url}' );
 						var id_token = googleUser.getAuthResponse().id_token;
-						window.location = '{$authURL}' + id_token;
+						window.location = '{$url}' + id_token;
 					}
 				</script>\n";
 			return $code;
