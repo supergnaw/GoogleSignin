@@ -101,9 +101,6 @@ if( !empty( $goo->err )) {
 	die;
 }
 ```
-Further down, this section does the nitty-gritty fetching user data. Using the token passed through GET, user data is fetched from Google, then is passed to $\_SESSION to the key defined in the *$goo->sessVar* class variable:
-```PHP
-
 
 ## Class Functions
 future documentation
