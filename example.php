@@ -30,7 +30,7 @@
       }
     } else {
       // sign out
-      echo "<p>You are signed in</p>
+      echo "<p>".$goo->signin_button()."</p>
             <p><a href='?signout=true'>Sign Out</a></p>";
       // show session variable
       var_dump( $_SESSION );
